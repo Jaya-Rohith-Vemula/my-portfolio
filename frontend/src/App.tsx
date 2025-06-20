@@ -1,27 +1,9 @@
 import "./App.css";
 
-import { Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { routes } from "./routes";
+import Router from "./layout/Router";
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        {routes.map((route) => (
-          <Route
-            key={route.path}
-            path={route.path}
-            element={
-              <Suspense fallback={route.fallback}>
-                <route.Component />
-              </Suspense>
-            }
-          />
-        ))}
-      </Routes>
-    </BrowserRouter>
-  );
+  return <Router />;
 }
 
 export default App;
