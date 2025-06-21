@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+.signin-link {
+  color: #757575;
+  text-decoration: underline;
+  display: inline-block;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+.signin-link:hover {
+  color: #616161;
+  transform: scale(1.05);
+}

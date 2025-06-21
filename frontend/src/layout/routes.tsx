@@ -10,6 +10,14 @@ export const routes = [
     component: lazy(() => import("../pages/About")),
   },
   {
+    path: "/signup",
+    component: lazy(() => import("../pages/SignUp")),
+  },
+  {
+    path: "/signin",
+    component: lazy(() => import("../pages/SignIn")),
+  },
+  {
     path: "*",
     component: lazy(() => import("../pages/NotFound")),
   },
