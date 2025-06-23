@@ -21,4 +21,12 @@ export const routes = [
     path: "*",
     component: lazy(() => import("../pages/NotFound")),
   },
+  {
+    path: "/landingpage",
+    component: lazy(() => import("../pages/LandingPage")),
+  },
+  {
+    path: "/create",
+    component: lazy(() => import("../pages/Create/Create")),
+  },
 ];

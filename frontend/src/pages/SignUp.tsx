@@ -1,8 +1,8 @@
-import AuthForm from "../components/AuthForm";
+import AuthForm, { type AuthFormValues } from "../components/AuthForm";
 import { Quote } from "../components/Quote";
 
 const SignUp = () => {
-  const onSubmit = (data) => {
+  const onSubmit = (data: AuthFormValues) => {
     console.log(data);
   };
 

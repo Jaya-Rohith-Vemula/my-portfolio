@@ -13,7 +13,7 @@ interface AuthFormProps {
   title?: string;
 }
 
-interface AuthFormValues {
+export interface AuthFormValues {
   username?: string;
   email: string;
   password: string;
@@ -87,8 +87,8 @@ export default function AuthForm({
               borderRadius: "16px",
               px: 4,
               py: 1.5,
-              backgroundColor: grey[600],
-              "&:hover": { backgroundColor: grey[800] },
+              backgroundColor: grey[800],
+              "&:hover": { backgroundColor: grey[900] },
             }}
           >
             {title}
@@ -99,10 +99,7 @@ export default function AuthForm({
         {title === "Sign Up"
           ? "Already have an account?"
           : `Don't have an account yet?`}{" "}
-        <Link
-          to={title === "Sign Up" ? "/signin" : "/signup"}
-          className="signin-link"
-        >
+        <Link to={title === "Sign Up" ? "/signin" : "/signup"} className="link">
           {title === "Sign Up" ? "Sign In" : "Sign Up"}
         </Link>
       </p>
