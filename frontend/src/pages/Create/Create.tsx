@@ -36,7 +36,12 @@ interface ProjectEntry {
 
 interface PortfolioFormValues {
   title: string;
+  name: string;
   about: string;
+  phNumber?: string;
+  email?: string;
+  linkedIn?: string;
+  github?: string;
   education: EducationEntry[];
   experience: ExperienceEntry[];
   projects: ProjectEntry[];
@@ -52,6 +57,13 @@ export default function CreatePortfolioPage() {
   } = useForm<PortfolioFormValues>({
     resolver: yupResolver(schema as yup.ObjectSchema<PortfolioFormValues>),
     defaultValues: {
+      title: "",
+      name: "",
+      about: "",
+      phNumber: "",
+      email: "",
+      linkedIn: "",
+      github: "",
       education: [
         { school: "", degree: "", startMonthYear: "", endMonthYear: "" },
       ],
@@ -81,32 +93,83 @@ export default function CreatePortfolioPage() {
   return (
     <Box className="min-h-screen bg-gradient-to-bl from-gray-200 to-gray-400 px-4 py-8 flex flex-col items-center justify-center">
       <Box className="max-w-4xl w-full bg-gray-100 p-6 rounded-xl shadow">
-        <Typography variant="h4" sx={{ color: grey[800] }}>
+        <Typography variant="h4" sx={{ color: grey[800], pb: 2 }}>
           Create Portfolio
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
-          <TextField
-            label="Title"
-            id="title"
-            fullWidth
-            required
-            margin="normal"
-            {...register("title")}
-            error={!!errors.title}
-            helperText={errors.title?.message}
-          />
-          <TextField
-            label="About"
-            id="about"
-            fullWidth
-            required
-            multiline
-            minRows={4}
-            margin="normal"
-            {...register("about")}
-            error={!!errors.about}
-            helperText={errors.about?.message}
-          />
+          <Grid container spacing={1}>
+            <TextField
+              label="Title of this Portfolio"
+              id="title"
+              fullWidth
+              required
+              {...register("title")}
+              error={!!errors.title}
+              helperText={errors.title?.message}
+            />
+            <Grid size={{ xs: 12, md: 4 }}>
+              <TextField
+                label="Full Name"
+                id="name"
+                fullWidth
+                required
+                {...register("name")}
+                error={!!errors.name}
+                helperText={errors.name?.message}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 4 }}>
+              <TextField
+                label="Phone Number"
+                id="phNumber"
+                fullWidth
+                {...register("phNumber")}
+                error={!!errors.phNumber}
+                helperText={errors.phNumber?.message}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 4 }}>
+              <TextField
+                label="Email"
+                id="email"
+                fullWidth
+                {...register("email")}
+                error={!!errors.email}
+                helperText={errors.email?.message}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <TextField
+                label="LinkedIn Profile"
+                id="linkedIn"
+                fullWidth
+                {...register("linkedIn")}
+                error={!!errors.linkedIn}
+                helperText={errors.linkedIn?.message}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <TextField
+                label="GitHub Profile"
+                id="github"
+                fullWidth
+                {...register("github")}
+                error={!!errors.github}
+                helperText={errors.github?.message}
+              />
+            </Grid>
+            <TextField
+              label="About"
+              id="about"
+              fullWidth
+              required
+              multiline
+              minRows={4}
+              {...register("about")}
+              error={!!errors.about}
+              helperText={errors.about?.message}
+            />
+          </Grid>
 
           <Divider sx={{ my: 2 }} />
 
@@ -114,10 +177,10 @@ export default function CreatePortfolioPage() {
             Education
           </Typography>
           {educationFields.fields.map((field, index) => (
-            <div key={field.id} className="mb-2">
+            <div key={field.id} className="mb-4">
               <Grid container spacing={2}>
                 <Grid size={{ xs: 12, sm: 11 }}>
-                  <Grid container spacing={2}>
+                  <Grid container spacing={1}>
                     <Grid size={{ xs: 12, sm: 6 }}>
                       <TextField
                         label="School"
@@ -202,10 +265,10 @@ export default function CreatePortfolioPage() {
             Work Experience
           </Typography>
           {experienceFields.fields.map((field, index) => (
-            <div key={field.id} className="mb-2">
+            <div key={field.id} className="mb-4">
               <Grid container spacing={2}>
                 <Grid size={{ xs: 12, sm: 11 }}>
-                  <Grid container spacing={2}>
+                  <Grid container spacing={1}>
                     <Grid size={{ xs: 12, sm: 6 }}>
                       <TextField
                         label="Company"
@@ -306,10 +369,10 @@ export default function CreatePortfolioPage() {
             Projects
           </Typography>
           {projectFields.fields.map((field, index) => (
-            <div key={field.id} className="mb-2">
+            <div key={field.id} className="mb-4">
               <Grid container spacing={2}>
                 <Grid size={{ xs: 12, sm: 11 }}>
-                  <Grid container spacing={2}>
+                  <Grid container spacing={1}>
                     <Grid size={{ xs: 12, sm: 12 }}>
                       <TextField
                         label="Project Name"
@@ -338,7 +401,7 @@ export default function CreatePortfolioPage() {
                   size={{ xs: 12, sm: 1 }}
                   sx={{ display: "flex", justifyContent: "center" }}
                 >
-                  <IconButton onClick={() => experienceFields.remove(index)}>
+                  <IconButton onClick={() => projectFields.remove(index)}>
                     <Delete />
                   </IconButton>
                 </Grid>
@@ -370,6 +433,8 @@ export default function CreatePortfolioPage() {
                 fullWidth
                 required
                 {...register(`skills.${index}.value`)}
+                error={!!errors.skills?.[index]?.value}
+                helperText={errors.skills?.[index]?.value?.message}
               />
               <IconButton onClick={() => skillFields.remove(index)}>
                 <Delete />

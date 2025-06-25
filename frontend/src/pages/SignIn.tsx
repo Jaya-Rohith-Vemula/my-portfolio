@@ -1,9 +1,13 @@
+import { useNavigate } from "react-router-dom";
 import AuthForm, { type AuthFormValues } from "../components/AuthForm";
 import { Quote } from "../components/Quote";
 
 const SignIn = () => {
+  const navigate = useNavigate();
   const onSubmit = (data: AuthFormValues) => {
     console.log(data);
+    localStorage.setItem("token", "dummy-token");
+    navigate("/landingpage");
   };
 
   return (

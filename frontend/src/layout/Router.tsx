@@ -1,24 +1,25 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { routes } from "./routes";
-import ErrorFallback from "../components/ErrorFallback";
+import { publicRoutes, protectedRoutes } from "./routes";
 import Root from "./Root";
+import ProtectedRoute from "../components/ProtectedRoute";
+import ErrorFallback from "../components/ErrorFallback";
 
-function Router() {
+export default function Router() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Root />} errorElement={<ErrorFallback />}>
-          {routes.map((route) => (
-            <Route
-              key={route.path}
-              path={route.path}
-              element={<route.component />}
-            />
+          {publicRoutes.map(({ path, component: Component }) => (
+            <Route key={path} path={path} element={<Component />} />
           ))}
+
+          <Route element={<ProtectedRoute />}>
+            {protectedRoutes.map(({ path, component: Component }) => (
+              <Route key={path} path={path} element={<Component />} />
+            ))}
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
   );
 }
-
-export default Router;

@@ -1,24 +1,31 @@
 import { Box } from "@mui/material";
 import { ErrorBoundary } from "react-error-boundary";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import ErrorFallback from "../components/ErrorFallback";
+import Header from "../components/Header";
 
 const Root = () => {
+  const { pathname } = useLocation();
+
+  const hideHeaderOn = ["/", "/signin", "/signup"];
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        minHeight: "100vh",
-        width: "100vw",
-      }}
-    >
-      <Box component="main" sx={{ flex: 1 }} id="main">
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <Outlet />
-        </ErrorBoundary>
+    <>
+      {!hideHeaderOn.includes(pathname) && <Header />}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          minHeight: "100vh",
+          width: "100vw",
+        }}
+      >
+        <Box component="main" sx={{ flex: 1 }} id="main">
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <Outlet />
+          </ErrorBoundary>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 

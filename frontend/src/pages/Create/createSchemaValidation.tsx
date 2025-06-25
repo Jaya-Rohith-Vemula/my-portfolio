@@ -3,6 +3,11 @@ import * as yup from "yup";
 const schema = yup.object().shape({
   title: yup.string().required("Title is required"),
   about: yup.string().required("About is required"),
+  name: yup.string().required("Name is required"),
+  phNumber: yup.string().optional(),
+  email: yup.string().optional().email("Invalid email"),
+  linkedIn: yup.string().optional(),
+  github: yup.string().optional(),
   education: yup.array().of(
     yup.object().shape({
       school: yup.string().required("School is required"),
@@ -28,7 +33,9 @@ const schema = yup.object().shape({
   ),
   skills: yup
     .array()
-    .of(yup.object().shape({ value: yup.string().required() })),
+    .of(
+      yup.object().shape({ value: yup.string().required("Skill is required") })
+    ),
 });
 
 export default schema;
