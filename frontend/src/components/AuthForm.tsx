@@ -44,7 +44,6 @@ export default function AuthForm({
   });
 
   const handleFormSubmit = (data: AuthFormValues) => {
-    console.log("Form submitted with data:", data);
     onSubmit(data);
   };
 

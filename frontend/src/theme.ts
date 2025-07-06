@@ -20,6 +20,16 @@ const theme = createTheme({
         },
       },
     },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          "&:focus": {
+            outline: "2px solid grey",
+            boxShadow: "none",
+          },
+        },
+      },
+    },
   },
 });
 

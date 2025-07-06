@@ -24,9 +24,7 @@ export default function LandingPage() {
     <div className="min-h-screen bg-gradient-to-bl from-gray-200 to-gray-400 px-4 py-10 flex flex-col items-center">
       <div className="max-w-4xl w-full">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-          <Typography variant="h4" sx={{ color: grey[800], fontWeight: 600 }}>
-            Your Portfolios
-          </Typography>
+          <h1 className="text-gray-800">Your Portfolios</h1>
           <Link to="/create">
             <Button
               variant="contained"

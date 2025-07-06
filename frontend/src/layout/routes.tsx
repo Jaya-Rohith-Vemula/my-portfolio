@@ -63,4 +63,12 @@ export const protectedRoutes = [
     path: "/create",
     component: lazy(() => import("../pages/Create/Create")),
   },
+  {
+    path: "create/with-pdf",
+    component: lazy(() => import("../pages/Create/CreateWithPDF")),
+  },
+  {
+    path: "create/with-form",
+    component: lazy(() => import("../pages/Create/CreateWithForm")),
+  },
 ];

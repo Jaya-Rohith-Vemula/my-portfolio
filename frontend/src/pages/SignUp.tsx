@@ -1,9 +1,13 @@
-import AuthForm, { type AuthFormValues } from "../components/AuthForm";
+import { useNavigate } from "react-router-dom";
+import AuthForm from "../components/AuthForm";
 import { Quote } from "../components/Quote";
 
 const SignUp = () => {
-  const onSubmit = (data: AuthFormValues) => {
-    console.log(data);
+  const navigate = useNavigate();
+
+  const onSubmit = () => {
+    localStorage.setItem("token", "dummy-token");
+    navigate("/landingpage");
   };
 
   return (

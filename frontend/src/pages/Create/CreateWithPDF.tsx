@@ -1,0 +1,69 @@
+import { Box, Typography, Grid, Button, Alert } from "@mui/material";
+import { grey } from "@mui/material/colors";
+import Dropzone from "../../components/Dropzone";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
+
+const CreateWithPDF = () => {
+  const title = useLocation().state.title;
+  const [extractedText, setExtractedText] = useState("");
+  const [error, setError] = useState("");
+
+  const handleGenerate = () => {
+    if (!extractedText.trim()) {
+      setError("Please upload a PDF and extract text before generating.");
+      return;
+    }
+    setError("");
+    console.log("Generate portfolio with text:", extractedText);
+  };
+
+  return (
+    <Box className="min-h-screen bg-gradient-to-bl from-gray-50 to-gray-400 px-4 py-8 flex flex-col items-center justify-center">
+      <Typography variant="h4" sx={{ color: grey[800], pb: 2 }}>
+        <b>{title}</b> Portfolio
+      </Typography>
+
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
+
+      <Box className="max-w-4xl w-full bg-gray-100 p-6 rounded-xl shadow">
+        <Grid container spacing={2}>
+          <Grid size={{ xs: 12, md: 10 }}>
+            <Dropzone
+              onExtracted={(text) => {
+                setExtractedText(text);
+                setError("");
+              }}
+            />
+          </Grid>
+          <Grid
+            size={{ xs: 12, md: 2 }}
+            sx={{ display: "flex", alignItems: "center" }}
+          >
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              sx={{
+                backgroundColor: grey[800],
+                borderRadius: 2,
+                px: 4,
+                py: 1.5,
+                "&:hover": { backgroundColor: grey[900] },
+              }}
+              onClick={handleGenerate}
+            >
+              Generate
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
+    </Box>
+  );
+};
+
+export default CreateWithPDF;
