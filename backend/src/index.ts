@@ -1,14 +1,10 @@
 import { Hono } from "hono";
+import { userRouter } from "./routes/user";
+import { cors } from "hono/cors";
 
-// Create the main Hono app
 const app = new Hono();
 
-app.post("/api/v1/signup", (c) => {
-  return c.text("signup route");
-});
-
-app.post("/api/v1/signin", (c) => {
-  return c.text("signin route");
-});
+app.use("/*", cors());
+app.route("api/v1/user", userRouter);
 
 export default app;
