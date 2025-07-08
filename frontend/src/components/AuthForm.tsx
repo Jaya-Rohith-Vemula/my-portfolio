@@ -6,11 +6,13 @@ import Button from "@mui/material/Button";
 import { Box } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { Link } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 
 interface AuthFormProps {
   includeUsername?: boolean;
   onSubmit: (data: AuthFormValues) => void;
   title?: string;
+  loading: boolean;
 }
 
 export interface AuthFormValues {
@@ -23,6 +25,7 @@ export default function AuthForm({
   includeUsername = false,
   onSubmit,
   title = "Sign Up",
+  loading,
 }: AuthFormProps) {
   const schema = yup.object({
     ...(includeUsername
@@ -89,8 +92,13 @@ export default function AuthForm({
               backgroundColor: grey[800],
               "&:hover": { backgroundColor: grey[900] },
             }}
+            disabled={loading}
           >
-            {title}
+            {loading ? (
+              <CircularProgress size={24} sx={{ color: "white" }} />
+            ) : (
+              title
+            )}
           </Button>
         </Box>
       </form>
