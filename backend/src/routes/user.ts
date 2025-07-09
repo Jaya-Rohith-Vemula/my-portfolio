@@ -58,7 +58,6 @@ userRouter.post("/signup", async (c) => {
     });
   } catch (e) {
     c.status(401);
-    console.error("Error creating user:", e);
     return c.json({
       message: "Unable to create user at this time. Please try again later",
     });
