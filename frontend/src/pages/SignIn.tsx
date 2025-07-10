@@ -2,7 +2,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AuthForm, { type AuthFormValues } from "../components/AuthForm";
 import { Quote } from "../components/Quote";
-import type { SignInRequest, ErrorResponse } from "../types/auth";
+import type { SignInRequest, ErrorResponse } from "../types/types";
 import { postSignIn } from "../services/Service";
 import { useState } from "react";
 

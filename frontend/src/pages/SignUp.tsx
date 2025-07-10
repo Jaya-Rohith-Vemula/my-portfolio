@@ -3,7 +3,7 @@ import AuthForm, { type AuthFormValues } from "../components/AuthForm";
 import { Quote } from "../components/Quote";
 import axios from "axios";
 import { postSignUp } from "../services/Service";
-import type { SignUpRequest, ErrorResponse } from "../types/auth";
+import type { SignUpRequest, ErrorResponse } from "../types/types";
 import { useState } from "react";
 
 const SignUp = () => {

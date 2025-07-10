@@ -44,7 +44,7 @@ export default function Create() {
       <Box maxWidth={480} width="100%" mb={4}>
         <Card elevation={4} sx={{ borderRadius: 4, p: 3 }}>
           <TextField
-            label="Title of this Portfolio"
+            label="Portfolio Title"
             id="title"
             fullWidth
             required
@@ -58,7 +58,7 @@ export default function Create() {
           />
         </Card>
       </Box>
-      <Grid container spacing={3} justifyContent="center" maxWidth={800}>
+      <Grid container spacing={3} justifyContent={"center"} maxWidth={800}>
         <Grid size={{ xs: 12, sm: 6 }}>
           <Card
             elevation={6}

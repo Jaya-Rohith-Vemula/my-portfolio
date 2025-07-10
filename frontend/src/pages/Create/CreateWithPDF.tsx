@@ -1,20 +1,50 @@
-import { Box, Typography, Grid, Button, Alert } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Grid,
+  Button,
+  Alert,
+  CircularProgress,
+} from "@mui/material";
 import { grey } from "@mui/material/colors";
 import Dropzone from "../../components/Dropzone";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import type { CreatePortfolio, ErrorResponse } from "../../types/types";
+import { postCreatePortfolio } from "../../services/Service";
+import axios from "axios";
 
 const CreateWithPDF = () => {
+  const navigate = useNavigate();
   const title = useLocation().state.title;
   const [extractedText, setExtractedText] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (!extractedText.trim()) {
       setError("Please upload a PDF and extract text before generating.");
       return;
     }
     setError("");
+    setLoading(true);
+    try {
+      const payload: CreatePortfolio = {
+        name: title,
+        content: extractedText,
+      };
+
+      const response = await postCreatePortfolio(payload);
+      if (response.id) navigate("/landingpage");
+    } catch (error) {
+      if (axios.isAxiosError<ErrorResponse>(error)) {
+        alert(error.response?.data?.message ?? "unable to create portfolio");
+      } else {
+        alert("An unexpected error occurred");
+      }
+    } finally {
+      setLoading(false);
+    }
     console.log("Generate portfolio with text:", extractedText);
   };
 
@@ -57,7 +87,11 @@ const CreateWithPDF = () => {
               }}
               onClick={handleGenerate}
             >
-              Generate
+              {loading ? (
+                <CircularProgress size={24} sx={{ color: "white" }} />
+              ) : (
+                "Generate"
+              )}
             </Button>
           </Grid>
         </Grid>

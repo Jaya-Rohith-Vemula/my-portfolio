@@ -9,6 +9,11 @@ export interface SignUpRequest {
   username: string;
 }
 
+export interface CreatePortfolio {
+  name: string;
+  content: string;
+}
+
 export interface AuthResponse {
   jwt: string;
 }
