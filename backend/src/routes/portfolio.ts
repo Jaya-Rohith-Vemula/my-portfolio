@@ -85,3 +85,30 @@ portfolioRouter.post("/create", async (c) => {
     });
   }
 });
+
+portfolioRouter.get("/list-by-user", async (c) => {
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL,
+  }).$extends(withAccelerate());
+
+  const userId = c.get("userId");
+
+  try {
+    const list = await prisma.portfolio.findMany({
+      where: {
+        userId,
+      },
+    });
+
+    return c.json(list);
+  } catch (e) {
+    {
+      c.status(500);
+      console.error("Error fetching portfolios:", e);
+      return c.json({
+        message:
+          "Unable to fetch portfolios at this time. Please try again later",
+      });
+    }
+  }
+});

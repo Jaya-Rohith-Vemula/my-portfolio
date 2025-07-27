@@ -35,6 +35,17 @@ export const postCreatePortfolio = async (data: CreatePortfolio) => {
       },
     }
   );
+  return response.data;
+};
 
+export const getPortfoliosByUser = async () => {
+  const response = await axios.get(
+    `${BACKEND_URL}/api/v1/portfolio/list-by-user`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
   return response.data;
 };

@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import { Typography, CardContent } from "@mui/material";
 import { grey } from "@mui/material/colors";
+import { getPortfoliosByUser } from "../services/Service";
 
 interface Portfolio {
   id: string;
-  title: string;
+  name: string;
   link: string;
 }
 
@@ -14,10 +15,15 @@ export default function LandingPage() {
   const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
 
   useEffect(() => {
-    setPortfolios([
-      { id: "1", title: "Developer Portfolio", link: "/portfolio/1" },
-      { id: "2", title: "UX Case Study", link: "/portfolio/2" },
-    ]);
+    const fetchPortfolios = async () => {
+      try {
+        const result = await getPortfoliosByUser();
+        setPortfolios(result);
+      } catch (err) {
+        setPortfolios([]);
+      }
+    };
+    fetchPortfolios();
   }, []);
 
   return (
@@ -48,7 +54,7 @@ export default function LandingPage() {
             >
               <CardContent>
                 <Typography variant="h6" sx={{ color: grey[800], mb: 1 }}>
-                  {portfolio.title}
+                  {portfolio.name}
                 </Typography>
                 <Link to={portfolio.link} className="link">
                   View Portfolio
