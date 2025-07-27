@@ -35,7 +35,6 @@ const CreateWithPDF = () => {
       };
 
       const response = await postCreatePortfolio(payload);
-      console.log(response);
       if (response.id) navigate("/landingpage");
     } catch (error) {
       if (axios.isAxiosError<ErrorResponse>(error)) {

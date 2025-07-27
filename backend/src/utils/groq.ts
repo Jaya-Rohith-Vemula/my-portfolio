@@ -1,20 +1,26 @@
 import fetch from "node-fetch";
 
 const generateHtmlPrompt = (data: { content: string }) => `
-You are an expert portfolio website generator. Based on the following JSON data, generate a responsive HTML page with all CSS inlined in the <style> tag inside <head> (no external stylesheets). The HTML should be clean, modern, and mobile-friendly.
-
-JSON Input:
-${JSON.stringify(data, null, 2)}
+You are an expert professional portfolio Frontend website designer. Based on the following Resume JSON data, generate a clean, modern, and highly professional responsive HTML page with all CSS inlined in the <style> tag inside <head> (no external stylesheets).
 
 Requirements:
-- Use a modern web design.
-- Responsive layout for desktop and mobile.
-- Use semantic HTML5 where possible.
-- Use inline CSS only (no external files).
-- Do not hallucinate or add/remove information.
-- Start with <!DOCTYPE html>.
+- Use semantic HTML5 elements.
+- Mobile-first responsive design using CSS Flexbox or Grid.
+- Minimalist design inspired by popular professional portfolios.
+- Use harmonious, professional color palettes.
+- Use readable, elegant fonts with proper hierarchy.
+- Style should be aesthetically pleasing with good spacing, margins, and accessible color contrast.
+- Include subtle hover and focus states for interactive elements.
+- Use base font-size 16px, scaling for headings and text.
+- Include smooth responsive adjustments for screen widths 320px to 1200px.
+- Begin with <!DOCTYPE html>.
 - Do NOT add markdown, comments, explanations, or summaries.
 - Only return the HTML — no text before or after it.
+
+JSON Resume Data:
+${data.content}
+
+Only respond with the full, complete HTML.
 `;
 
 export const generateHtmlWithGroq = async (
@@ -36,7 +42,7 @@ export const generateHtmlWithGroq = async (
       body: JSON.stringify({
         model: "llama-3.1-8b-instant",
         messages: [{ role: "user", content: prompt }],
-        temperature: 0.2,
+        temperature: 0.5,
       }),
     }
   );
