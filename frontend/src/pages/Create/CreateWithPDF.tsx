@@ -35,6 +35,7 @@ const CreateWithPDF = () => {
       };
 
       const response = await postCreatePortfolio(payload);
+      console.log(response);
       if (response.id) navigate("/landingpage");
     } catch (error) {
       if (axios.isAxiosError<ErrorResponse>(error)) {
@@ -45,7 +46,6 @@ const CreateWithPDF = () => {
     } finally {
       setLoading(false);
     }
-    console.log("Generate portfolio with text:", extractedText);
   };
 
   return (

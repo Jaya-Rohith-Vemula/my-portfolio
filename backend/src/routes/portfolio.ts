@@ -3,11 +3,13 @@ import { createPortfolioSchema } from "../zodSchemas";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { verify } from "hono/jwt";
+import { generateHtmlWithGroq } from "../utils/groq";
 
 export const portfolioRouter = new Hono<{
   Bindings: {
     DATABASE_URL: string;
     JWT_SECRET: string;
+    GROQ_API_KEY: string;
   };
   Variables: {
     userId: string;
@@ -39,14 +41,23 @@ portfolioRouter.use("/*", async (c, next) => {
 portfolioRouter.post("/create", async (c) => {
   const body = await c.req.json();
 
-  const parseResult = createPortfolioSchema.safeParse(body);
-  if (!parseResult.success) {
+  const parsedResult = createPortfolioSchema.safeParse(body);
+  if (!parsedResult.success) {
     c.status(400);
     return c.json({
       message: "Invalid input",
-      errors: parseResult.error.errors,
+      errors: parsedResult.error.errors,
     });
   }
+
+  const apiKey = c.env.GROQ_API_KEY;
+
+  const html: string = await generateHtmlWithGroq(
+    {
+      content: body.content,
+    },
+    apiKey
+  );
 
   const userId = c.get("userId");
 
@@ -59,7 +70,8 @@ portfolioRouter.post("/create", async (c) => {
       data: {
         name: body.name,
         content: body.content,
-        userId: userId,
+        userId,
+        page: html,
       },
     });
 
