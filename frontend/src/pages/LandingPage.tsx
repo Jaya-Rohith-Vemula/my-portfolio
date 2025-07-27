@@ -8,7 +8,7 @@ import { getPortfoliosByUser } from "../services/Service";
 interface Portfolio {
   id: string;
   name: string;
-  link: string;
+  user: { username: string };
 }
 
 export default function LandingPage() {
@@ -18,6 +18,7 @@ export default function LandingPage() {
     const fetchPortfolios = async () => {
       try {
         const result = await getPortfoliosByUser();
+        console.log(result);
         setPortfolios(result);
       } catch (err) {
         setPortfolios([]);
@@ -56,7 +57,15 @@ export default function LandingPage() {
                 <Typography variant="h6" sx={{ color: grey[800], mb: 1 }}>
                   {portfolio.name}
                 </Typography>
-                <Link to={portfolio.link} className="link">
+                <Link
+                  to={`/username/${portfolio.user.username
+                    .trim()
+                    .replace(/\s+/g, "-")}/portfolio/${portfolio.name
+                    .trim()
+                    .replace(/\s+/g, "-")}`}
+                  target="_blank"
+                  className="link"
+                >
                   View Portfolio
                 </Link>
               </CardContent>

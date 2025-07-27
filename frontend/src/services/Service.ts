@@ -49,3 +49,16 @@ export const getPortfoliosByUser = async () => {
   );
   return response.data;
 };
+
+export const getPortfolio = async (username: string, portfolioName: string) => {
+  const response = await axios.get(`${BACKEND_URL}/api/v1/portfolio/view`, {
+    params: {
+      username,
+      portfolioName,
+    },
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+  return response.data;
+};

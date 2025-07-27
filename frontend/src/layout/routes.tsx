@@ -49,6 +49,10 @@ export const publicRoutes = [
     component: lazy(() => import("../pages/SignIn")),
   },
   {
+    path: "/username/:username/portfolio/:portfolioName",
+    component: lazy(() => import("../pages/ViewPortfolio/ViewPortfolio")),
+  },
+  {
     path: "*",
     component: lazy(() => import("../pages/NotFound")),
   },
