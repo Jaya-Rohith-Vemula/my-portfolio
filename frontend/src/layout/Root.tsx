@@ -1,20 +1,15 @@
 import { Box } from "@mui/material";
 import { ErrorBoundary } from "react-error-boundary";
-import { Outlet, useLocation, matchPath } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import ErrorFallback from "../components/ErrorFallback";
 import Header from "../components/Header";
 
 const Root = () => {
   const { pathname } = useLocation();
 
-  const hideHeaderOn = ["/", "/signin", "/signup"];
+  const hideHeaderOn = ["/", "/signin", "/signup", "/edit"];
 
-  const shouldHideHeader = () =>
-    hideHeaderOn.includes(pathname) ||
-    matchPath(
-      { path: "/username/:username/portfolio/:portfolioName", end: true },
-      pathname
-    );
+  const shouldHideHeader = () => hideHeaderOn.includes(pathname);
 
   return (
     <>

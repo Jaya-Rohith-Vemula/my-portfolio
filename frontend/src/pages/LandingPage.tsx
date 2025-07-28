@@ -58,13 +58,9 @@ export default function LandingPage() {
                   {portfolio.name}
                 </Typography>
                 <Link
-                  to={`/username/${portfolio.user.username
-                    .trim()
-                    .replace(/\s+/g, "-")}/portfolio/${portfolio.name
-                    .trim()
-                    .replace(/\s+/g, "-")}`}
-                  target="_blank"
+                  to={"/edit"}
                   className="link"
+                  state={{ portfolioName: portfolio.name }}
                 >
                   View Portfolio
                 </Link>

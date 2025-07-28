@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getPortfolio } from "../../services/Service";
 import Split from "react-split";
 import { Button, Grid, Stack } from "@mui/material";
 
 export default function LiveHtmlEditor() {
   const [code, setCode] = useState("");
+  const { portfolioName } = useLocation().state;
   const [originalCode, setOriginalCode] = useState("");
-  const { username = "", portfolioName = "" } = useParams();
   const [srcDoc, setSrcDoc] = useState(code);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    getPortfolio(username, portfolioName).then((result) => {
+    getPortfolio(portfolioName).then((result) => {
       setCode(result.page);
       setOriginalCode(result.page);
     });
@@ -30,6 +31,10 @@ export default function LiveHtmlEditor() {
 
   function handleReset() {
     setCode(originalCode);
+  }
+
+  function handleBack() {
+    navigate("/landingPage");
   }
 
   return (
@@ -69,20 +74,31 @@ export default function LiveHtmlEditor() {
               }}
             />
           </Grid>
-          <Grid>
-            <Stack direction="row" spacing={2}>
-              <Button variant="contained" color="primary" onClick={handleSave}>
-                Save
+          <Grid container alignItems="center" justifyContent="space-between">
+            <Grid>
+              <Button variant="outlined" color="secondary" onClick={handleBack}>
+                Back
               </Button>
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={handleReset}
-                disabled={code === originalCode}
-              >
-                Reset
-              </Button>
-            </Stack>
+            </Grid>
+            <Grid>
+              <Stack direction="row" spacing={2}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleSave}
+                >
+                  Save
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={handleReset}
+                  disabled={code === originalCode}
+                >
+                  Reset
+                </Button>
+              </Stack>
+            </Grid>
           </Grid>
         </Grid>
 

@@ -62,7 +62,7 @@ portfolioRouter.post("/create", async (c) => {
 
     console.log("generated html", html);
 
-    html = html.replace("```html", "");
+    html = html.replace("```html\n", "");
     html = html.replace("```", "");
 
     console.log("refactored html", html);
@@ -124,11 +124,9 @@ portfolioRouter.get("/list-by-user", async (c) => {
 });
 
 portfolioRouter.get("/view", async (c) => {
-  console.log("username, portfolioName");
+  const userId = c.get("userId");
+  let { portfolioName } = c.req.query();
 
-  let { username, portfolioName } = c.req.query();
-
-  username = username.replace(/-/g, " ");
   portfolioName = portfolioName.replace(/-/g, " ");
 
   const prisma = new PrismaClient({
@@ -139,7 +137,7 @@ portfolioRouter.get("/view", async (c) => {
     const portfolio = await prisma.portfolio.findFirst({
       where: {
         name: portfolioName,
-        user: { username: username },
+        userId,
       },
       select: {
         page: true,
