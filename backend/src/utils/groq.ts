@@ -6,6 +6,7 @@ You are an expert professional portfolio Frontend website designer. Based on the
 Requirements:
 - Use semantic HTML5 elements.
 - Mobile-first responsive design using CSS Flexbox or Grid.
+- Strictly no images.
 - Minimalist design inspired by popular professional portfolios.
 - Use harmonious, professional color palettes.
 - Use readable, elegant fonts with proper hierarchy.
