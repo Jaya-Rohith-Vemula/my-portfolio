@@ -10,3 +10,13 @@
   color: #616161;
   transform: scale(1.05);
 }
+
+.gutter {
+  background-color: #000000;
+  cursor: col-resize;
+  border-left: 1px solid #bbb;
+  border-right: 1px solid #bbb;
+  width: 8px;
+  box-sizing: border-box;
+  transition: background-color 0.2s ease;
+}

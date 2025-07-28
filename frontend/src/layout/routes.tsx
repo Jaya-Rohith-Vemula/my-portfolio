@@ -50,7 +50,7 @@ export const publicRoutes = [
   },
   {
     path: "/username/:username/portfolio/:portfolioName",
-    component: lazy(() => import("../pages/ViewPortfolio/ViewPortfolio")),
+    component: lazy(() => import("../pages/LiveHtmlEditor/LiveHtmlEditor")),
   },
   {
     path: "*",
