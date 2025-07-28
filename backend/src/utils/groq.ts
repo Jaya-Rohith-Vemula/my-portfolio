@@ -12,7 +12,6 @@ Requirements:
 - Style should be aesthetically pleasing with good spacing, margins, and accessible color contrast.
 - Include subtle hover and focus states for interactive elements.
 - Use base font-size 16px, scaling for headings and text.
-- Include smooth responsive adjustments for screen widths 320px to 1200px.
 - Begin with <!DOCTYPE html>.
 - Do NOT add markdown, comments, explanations, or summaries.
 - Only return the HTML — no text before or after it.
