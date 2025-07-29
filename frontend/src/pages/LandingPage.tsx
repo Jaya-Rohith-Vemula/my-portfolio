@@ -51,19 +51,36 @@ export default function LandingPage() {
           {portfolios.map((portfolio) => (
             <div
               key={portfolio.id}
-              className="border-3 border-dashed border-gray-500 rounded-lg shadow-md "
+              className="border-3 border-dashed border-gray-500 rounded-lg shadow-md"
             >
               <CardContent>
                 <Typography variant="h6" sx={{ color: grey[800], mb: 1 }}>
                   {portfolio.name}
                 </Typography>
-                <Link
-                  to={"/edit"}
-                  className="link"
-                  state={{ portfolioName: portfolio.name }}
-                >
-                  View Portfolio
-                </Link>
+                <div className="flex gap-4 mt-2">
+                  <Link
+                    to="/edit"
+                    className="link"
+                    state={{ portfolioName: portfolio.name }}
+                  >
+                    Edit
+                  </Link>
+                  <Link
+                    to="/view"
+                    className="link"
+                    state={{ portfolioName: portfolio.name }}
+                  >
+                    View
+                  </Link>
+                  <span
+                    className="link cursor-pointer"
+                    onClick={() => {
+                      console.log("Deleted");
+                    }}
+                  >
+                    Delete
+                  </span>
+                </div>
               </CardContent>
             </div>
           ))}

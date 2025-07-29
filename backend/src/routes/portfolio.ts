@@ -4,6 +4,7 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { verify } from "hono/jwt";
 import { generateHtmlWithGroq } from "../utils/groq";
+import { nanoid } from "../utils/utils";
 
 export const portfolioRouter = new Hono<{
   Bindings: {
@@ -63,7 +64,7 @@ portfolioRouter.post("/create", async (c) => {
     console.log("generated html", html);
 
     html = html.replace("```html\n", "");
-    html = html.replace("```", "");
+    html = html.replace("\n```", "");
 
     console.log("refactored html", html);
 
@@ -73,12 +74,21 @@ portfolioRouter.post("/create", async (c) => {
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
 
+    let publicId = nanoid();
+
+    let collision = await prisma.portfolio.findUnique({ where: { publicId } });
+    while (collision) {
+      publicId = nanoid();
+      collision = await prisma.portfolio.findUnique({ where: { publicId } });
+    }
+
     const portfolio = await prisma.portfolio.create({
       data: {
         name: body.name,
         content: body.content,
         userId,
         page: html,
+        publicId,
       },
     });
 
