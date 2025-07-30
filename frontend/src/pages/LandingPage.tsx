@@ -5,7 +5,7 @@ import { Typography, CardContent } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { getPortfoliosByUser } from "../services/Service";
 
-interface Portfolio {
+export interface Portfolio {
   content: string;
   createdAt: string;
   id: string;
@@ -37,7 +37,7 @@ export default function LandingPage() {
       <div className="max-w-4xl w-full">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
           <h1 className="text-gray-800">Your Portfolios</h1>
-          <Link to="/create">
+          <Link to="/create" state={{ portfolios }}>
             <Button
               variant="contained"
               sx={{
@@ -77,14 +77,15 @@ export default function LandingPage() {
                   >
                     View
                   </Link>
-                  <span
+                  <Link
                     className="link cursor-pointer"
                     onClick={() => {
                       console.log("Deleted");
                     }}
+                    to={""}
                   >
                     Delete
-                  </span>
+                  </Link>
                 </div>
               </CardContent>
             </div>

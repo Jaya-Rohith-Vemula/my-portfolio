@@ -8,20 +8,33 @@ import {
   Typography,
   Grid,
   Toolbar,
+  Alert,
 } from "@mui/material";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import type { Portfolio } from "../LandingPage";
 
 export default function Create() {
   const titleRef = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState("");
   const [titleError, setTitleError] = useState(false);
+  const portfolios: Portfolio[] = useLocation().state?.portfolios || [];
+  const [duplicateTitleError, setDuplicateTitleError] = useState("");
+  console.log("Portfolios from state:", portfolios);
+
+  const portfolioNames = portfolios.map((p: Portfolio) => p.name.toLowerCase());
+  console.log(portfolioNames);
 
   const navigate = useNavigate();
 
   const handleCardClick = (type: string) => {
-    if (!title.trim()) {
+    const trimmedTitle = title.trim().toLowerCase();
+    if (portfolioNames.includes(trimmedTitle)) {
+      setDuplicateTitleError("Portfolio with this title already exists.");
+      return;
+    }
+    if (!trimmedTitle) {
       setTitleError(true);
       titleRef.current?.focus();
       return;
@@ -33,7 +46,9 @@ export default function Create() {
   };
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
+    const newValue = e.target.value.replace(/[^a-zA-Z0-9 ]/g, "");
+    setTitle(newValue);
+    if (duplicateTitleError) setDuplicateTitleError("");
     if (titleError && e.target.value.trim()) {
       setTitleError(false);
     }
@@ -42,6 +57,11 @@ export default function Create() {
   return (
     <div className="min-h-screen bg-gradient-to-bl from-gray-50 to-gray-400 flex flex-col items-center justify-center px-4">
       <Box maxWidth={480} width="100%" mb={4}>
+        {duplicateTitleError && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {duplicateTitleError}
+          </Alert>
+        )}
         <Card elevation={4} sx={{ borderRadius: 4, p: 3 }}>
           <TextField
             label="Portfolio Title"
