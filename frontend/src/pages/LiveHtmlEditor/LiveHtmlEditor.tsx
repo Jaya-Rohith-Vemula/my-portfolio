@@ -6,17 +6,17 @@ import { Button, Grid, Stack } from "@mui/material";
 
 export default function LiveHtmlEditor() {
   const [code, setCode] = useState("");
-  const { portfolioName } = useLocation().state;
+  const { publicId } = useLocation().state;
   const [originalCode, setOriginalCode] = useState("");
   const [srcDoc, setSrcDoc] = useState(code);
   const navigate = useNavigate();
 
   useEffect(() => {
-    getPortfolio(portfolioName).then((result) => {
+    getPortfolio(publicId).then((result) => {
       setCode(result.page);
       setOriginalCode(result.page);
     });
-  }, []);
+  }, [publicId]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {

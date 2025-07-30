@@ -17,6 +17,40 @@ export const portfolioRouter = new Hono<{
   };
 }>();
 
+portfolioRouter.get("/view", async (c) => {
+  const userId = c.get("userId");
+  let { publicId } = c.req.query();
+
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL,
+  }).$extends(withAccelerate());
+
+  try {
+    const portfolio = await prisma.portfolio.findFirst({
+      where: {
+        publicId,
+        userId,
+      },
+      select: {
+        page: true,
+      },
+    });
+
+    if (!portfolio) {
+      c.status(404);
+      return c.json({ message: "Portfolio not found" });
+    }
+
+    return c.json({ page: portfolio.page });
+  } catch (e) {
+    c.status(500);
+    console.error("Error fetching portfolio page:", e);
+    return c.json({
+      message: "Unable to fetch portfolio at this time. Please try again later",
+    });
+  }
+});
+
 portfolioRouter.use("/*", async (c, next) => {
   const jwt = c.req.header("Authorization");
   if (!jwt) {
@@ -130,41 +164,5 @@ portfolioRouter.get("/list-by-user", async (c) => {
           "Unable to fetch portfolios at this time. Please try again later",
       });
     }
-  }
-});
-
-portfolioRouter.get("/view", async (c) => {
-  const userId = c.get("userId");
-  let { portfolioName } = c.req.query();
-
-  portfolioName = portfolioName.replace(/-/g, " ");
-
-  const prisma = new PrismaClient({
-    datasourceUrl: c.env.DATABASE_URL,
-  }).$extends(withAccelerate());
-
-  try {
-    const portfolio = await prisma.portfolio.findFirst({
-      where: {
-        name: portfolioName,
-        userId,
-      },
-      select: {
-        page: true,
-      },
-    });
-
-    if (!portfolio) {
-      c.status(404);
-      return c.json({ message: "Portfolio not found" });
-    }
-
-    return c.json({ page: portfolio.page });
-  } catch (e) {
-    c.status(500);
-    console.error("Error fetching portfolio page:", e);
-    return c.json({
-      message: "Unable to fetch portfolio at this time. Please try again later",
-    });
   }
 });

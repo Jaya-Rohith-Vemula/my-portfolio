@@ -53,6 +53,10 @@ export const publicRoutes = [
     component: lazy(() => import("../pages/LiveHtmlEditor/LiveHtmlEditor")),
   },
   {
+    path: "/portfolio/:publicId",
+    component: lazy(() => import("../pages/ViewPortfolio/ViewPortfolio")),
+  },
+  {
     path: "*",
     component: lazy(() => import("../pages/NotFound")),
   },

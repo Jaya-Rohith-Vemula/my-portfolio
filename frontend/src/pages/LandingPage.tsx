@@ -6,8 +6,12 @@ import { grey } from "@mui/material/colors";
 import { getPortfoliosByUser } from "../services/Service";
 
 interface Portfolio {
+  content: string;
+  createdAt: string;
   id: string;
   name: string;
+  page: string;
+  publicId: string;
   user: { username: string };
 }
 
@@ -21,6 +25,7 @@ export default function LandingPage() {
         console.log(result);
         setPortfolios(result);
       } catch (err) {
+        console.error("Error fetching portfolios:", err);
         setPortfolios([]);
       }
     };
@@ -61,14 +66,14 @@ export default function LandingPage() {
                   <Link
                     to="/edit"
                     className="link"
-                    state={{ portfolioName: portfolio.name }}
+                    state={{ publicId: portfolio.publicId }}
                   >
                     Edit
                   </Link>
                   <Link
-                    to="/view"
+                    to={`/portfolio/${portfolio.publicId}`}
                     className="link"
-                    state={{ portfolioName: portfolio.name }}
+                    target="_blank"
                   >
                     View
                   </Link>
