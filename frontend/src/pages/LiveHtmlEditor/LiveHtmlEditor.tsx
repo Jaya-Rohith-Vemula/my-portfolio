@@ -76,7 +76,7 @@ export default function LiveHtmlEditor() {
           </Grid>
           <Grid container alignItems="center" justifyContent="space-between">
             <Grid>
-              <Button variant="outlined" color="secondary" onClick={handleBack}>
+              <Button variant="outlined" color="inherit" onClick={handleBack}>
                 Back
               </Button>
             </Grid>
@@ -91,7 +91,7 @@ export default function LiveHtmlEditor() {
                 </Button>
                 <Button
                   variant="outlined"
-                  color="secondary"
+                  color="inherit"
                   onClick={handleReset}
                   disabled={code === originalCode}
                 >

@@ -7,56 +7,41 @@ import type {
   CreatePortfolio,
 } from "../types/types";
 
-const token = localStorage.getItem("token");
+const api = axios.create({ baseURL: BACKEND_URL });
+
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 export const postSignIn = async (data: SignInRequest) => {
-  const response = await axios.post<AuthResponse>(
-    `${BACKEND_URL}/api/v1/user/signin`,
-    data
-  );
+  const response = await api.post<AuthResponse>(`/api/v1/user/signin`, data);
   return response.data;
 };
 
 export const postSignUp = async (data: SignUpRequest) => {
-  const response = await axios.post<AuthResponse>(
-    `${BACKEND_URL}/api/v1/user/signup`,
-    data
-  );
-  return response.data;
-};
-
-export const postCreatePortfolio = async (data: CreatePortfolio) => {
-  const response = await axios.post(
-    `${BACKEND_URL}/api/v1/portfolio/create`,
-    data,
-    {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    }
-  );
+  const response = await api.post<AuthResponse>(`/api/v1/user/signup`, data);
   return response.data;
 };
 
 export const getPortfoliosByUser = async () => {
-  const response = await axios.get(
-    `${BACKEND_URL}/api/v1/portfolio/list-by-user`,
-    {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    }
-  );
+  const response = await api.get("/api/v1/portfolio/list-by-user");
+  return response.data;
+};
+
+export const postCreatePortfolio = async (data: CreatePortfolio) => {
+  const response = await api.post("/api/v1/portfolio/create", data);
   return response.data;
 };
 
 export const getPortfolio = async (publicId: string) => {
-  const response = await axios.get(`${BACKEND_URL}/api/v1/portfolio/view`, {
+  const response = await api.get(`/api/v1/portfolio/view`, {
     params: {
       publicId,
-    },
-    headers: {
-      Authorization: "Bearer " + token,
     },
   });
   return response.data;
