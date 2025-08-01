@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "my-portfolio",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy --minify",
