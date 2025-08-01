@@ -21,3 +21,8 @@ export interface AuthResponse {
 export interface ErrorResponse {
   message: string;
 }
+
+export interface UpdatePortfolio {
+  publicId: string;
+  portfolioCode: string;
+}

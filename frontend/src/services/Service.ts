@@ -5,6 +5,7 @@ import type {
   AuthResponse,
   SignUpRequest,
   CreatePortfolio,
+  UpdatePortfolio,
 } from "../types/types";
 
 const api = axios.create({ baseURL: BACKEND_URL });
@@ -51,5 +52,10 @@ export const getPortfolio = async (publicId: string) => {
       publicId,
     },
   });
+  return response.data;
+};
+
+export const updatePortfolio = async (data: UpdatePortfolio) => {
+  const response = await api.put(`/api/v1/portfolio/update`, data);
   return response.data;
 };

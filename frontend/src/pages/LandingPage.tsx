@@ -112,7 +112,7 @@ export default function LandingPage() {
                       View
                     </Link>
                     <Link
-                      className="link cursor-pointer"
+                      className="link"
                       onClick={(e) => {
                         e.preventDefault();
                         handleDeleteClick(portfolio.publicId);

@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { createPortfolioSchema } from "../zodSchemas";
+import { createPortfolioSchema, updatePortfolioSchema } from "../zodSchemas";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { verify } from "hono/jwt";
@@ -95,12 +95,8 @@ portfolioRouter.post("/create", async (c) => {
       apiKey
     );
 
-    console.log("generated html", html);
-
     html = html.replace("```html\n", "");
     html = html.replace("\n```", "");
-
-    console.log("refactored html", html);
 
     const userId = c.get("userId");
 
@@ -191,6 +187,48 @@ portfolioRouter.delete("/delete", async (c) => {
       return c.json({
         message:
           "Unable to delete portfolio at this time. Please try again later",
+      });
+    }
+  }
+});
+
+portfolioRouter.put("/update", async (c) => {
+  const body = await c.req.json();
+
+  const parsedResult = updatePortfolioSchema.safeParse(body);
+  if (!parsedResult.success) {
+    c.status(400);
+    return c.json({
+      message: "Invalid input",
+      errors: parsedResult.error.errors,
+    });
+  }
+
+  const userId = c.get("userId");
+
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL,
+  }).$extends(withAccelerate());
+
+  try {
+    await prisma.portfolio.update({
+      where: {
+        publicId: body.publicId,
+        userId,
+      },
+      data: {
+        page: body.portfolioCode,
+      },
+    });
+
+    return c.json({ message: "Portfolio updated successfully" });
+  } catch (e) {
+    {
+      c.status(500);
+      console.error("Error updating portfolio:", e);
+      return c.json({
+        message:
+          "Unable to update portfolio at this time. Please try again later",
       });
     }
   }

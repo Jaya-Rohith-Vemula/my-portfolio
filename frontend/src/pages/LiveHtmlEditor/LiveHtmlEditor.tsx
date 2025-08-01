@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getPortfolio } from "../../services/Service";
+import { getPortfolio, updatePortfolio } from "../../services/Service";
 import Split from "react-split";
-import { Button, Grid, Stack } from "@mui/material";
+import { Button, CircularProgress, Grid, Stack } from "@mui/material";
 
 export default function LiveHtmlEditor() {
   const [code, setCode] = useState("");
   const { publicId } = useLocation().state;
   const [originalCode, setOriginalCode] = useState("");
-  const [srcDoc, setSrcDoc] = useState(code);
+  const [saveLoading, setSaveLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,13 +20,33 @@ export default function LiveHtmlEditor() {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setSrcDoc(code);
+      setCode(code);
     }, 250);
     return () => clearTimeout(timeout);
   }, [code]);
 
   function handleSave() {
-    console.log("Saved:\n" + code);
+    if (code === originalCode) {
+      alert("No changes made to save.");
+      return;
+    }
+    if (!code.trim()) {
+      alert("Portfolio content cannot be empty.");
+      return;
+    }
+    setSaveLoading(true);
+    updatePortfolio({
+      publicId,
+      portfolioCode: code,
+    })
+      .then(() => {
+        navigate("/landingPage");
+      })
+      .catch((error) => {
+        console.error("Error updating portfolio:", error);
+        alert("Failed to update portfolio. Please try again.");
+        setSaveLoading(false);
+      });
   }
 
   function handleReset() {
@@ -87,7 +107,11 @@ export default function LiveHtmlEditor() {
                   color="primary"
                   onClick={handleSave}
                 >
-                  Save
+                  {saveLoading ? (
+                    <CircularProgress size={24} sx={{ color: "white" }} />
+                  ) : (
+                    "Save"
+                  )}
                 </Button>
                 <Button
                   variant="outlined"
@@ -103,7 +127,7 @@ export default function LiveHtmlEditor() {
         </Grid>
         <Grid>
           <div
-            dangerouslySetInnerHTML={{ __html: srcDoc }}
+            dangerouslySetInnerHTML={{ __html: code }}
             style={{
               height: "100%",
               overflowY: "auto",
