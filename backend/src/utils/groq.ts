@@ -15,6 +15,7 @@ Requirements:
 - Use base font-size 16px, scaling for headings and text.
 - Begin with <!DOCTYPE html>.
 - Do NOT add markdown, comments, explanations, or summaries.
+- If any links (URLs) appear in the data, associate them to appropriate words or phrases (e.g., "Live Link", "GitHub Repo", "Portfolio", etc.) when rendering them as anchor tags, using context to determine the label. NEVER display raw URLs directly.
 - Only return the HTML — no text before or after it.
 
 JSON Resume Data:
