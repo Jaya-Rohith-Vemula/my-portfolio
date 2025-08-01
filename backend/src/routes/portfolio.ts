@@ -166,3 +166,32 @@ portfolioRouter.get("/list-by-user", async (c) => {
     }
   }
 });
+
+portfolioRouter.delete("/delete", async (c) => {
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL,
+  }).$extends(withAccelerate());
+
+  const userId = c.get("userId");
+  const { publicId } = c.req.query();
+
+  try {
+    await prisma.portfolio.delete({
+      where: {
+        publicId,
+        userId,
+      },
+    });
+
+    return c.json({ message: "Portfolio deleted successfully" });
+  } catch (e) {
+    {
+      c.status(500);
+      console.error("Error deleting portfolio:", e);
+      return c.json({
+        message:
+          "Unable to delete portfolio at this time. Please try again later",
+      });
+    }
+  }
+});

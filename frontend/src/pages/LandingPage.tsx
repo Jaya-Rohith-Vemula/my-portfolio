@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import { Typography, CardContent, CircularProgress } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import { getPortfoliosByUser } from "../services/Service";
+import { deletePortfolio, getPortfoliosByUser } from "../services/Service";
+import ConfirmDialog from "../components/ConfirmDialog";
 
 export interface Portfolio {
   content: string;
@@ -17,11 +18,14 @@ export interface Portfolio {
 
 export default function LandingPage() {
   const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   useEffect(() => {
     const fetchPortfolios = async () => {
-      setIsLoading(true);
+      setIsFetching(true);
       try {
         const result = await getPortfoliosByUser();
         setPortfolios(result);
@@ -29,10 +33,29 @@ export default function LandingPage() {
         console.error("Error fetching portfolios:", err);
         setPortfolios([]);
       }
-      setIsLoading(false);
+      setIsFetching(false);
     };
     fetchPortfolios();
   }, []);
+
+  const handleDeleteClick = (publicId: string) => {
+    setDeleteId(publicId);
+    setConfirmOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteId) return;
+    setDeleteLoading(true);
+    try {
+      await deletePortfolio(deleteId);
+      setPortfolios((prev) => prev.filter((p) => p.publicId !== deleteId));
+    } catch (err) {
+      console.error("Delete failed", err);
+    }
+    setDeleteLoading(false);
+    setDeleteId(null);
+    setConfirmOpen(false);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-bl from-gray-200 to-gray-400 px-4 py-10 flex flex-col items-center">
@@ -54,7 +77,7 @@ export default function LandingPage() {
             </Button>
           </Link>
         </div>
-        {isLoading ? (
+        {isFetching ? (
           <div className="flex justify-center items-center h-64">
             <CircularProgress />
           </div>
@@ -90,8 +113,9 @@ export default function LandingPage() {
                     </Link>
                     <Link
                       className="link cursor-pointer"
-                      onClick={() => {
-                        console.log("Deleted");
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleDeleteClick(portfolio.publicId);
                       }}
                       to={""}
                     >
@@ -104,6 +128,16 @@ export default function LandingPage() {
           </div>
         )}
       </div>
+      <ConfirmDialog
+        open={confirmOpen}
+        loading={deleteLoading}
+        onClose={() => setConfirmOpen(false)}
+        onConfirm={handleDeleteConfirm}
+        title="Delete Portfolio?"
+        message="Are you sure you want to delete this portfolio? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+      />
     </div>
   );
 }

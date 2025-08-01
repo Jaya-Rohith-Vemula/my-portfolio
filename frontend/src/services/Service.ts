@@ -38,6 +38,13 @@ export const postCreatePortfolio = async (data: CreatePortfolio) => {
   return response.data;
 };
 
+export const deletePortfolio = async (publicId: string) => {
+  const response = await api.delete("/api/v1/portfolio/delete", {
+    params: { publicId },
+  });
+  return response.data;
+};
+
 export const getPortfolio = async (publicId: string) => {
   const response = await api.get(`/api/v1/portfolio/view`, {
     params: {
