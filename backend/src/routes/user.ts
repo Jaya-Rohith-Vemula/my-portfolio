@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { sign } from "hono/jwt";
+import bcrypt from "bcryptjs";
 import { signupSchema, signinSchema } from "../zodSchemas";
 
 export const userRouter = new Hono<{
@@ -13,7 +14,6 @@ export const userRouter = new Hono<{
 
 userRouter.post("/signup", async (c) => {
   const body = await c.req.json();
-
   const parseResult = signupSchema.safeParse(body);
   if (!parseResult.success) {
     c.status(400);
@@ -31,7 +31,6 @@ userRouter.post("/signup", async (c) => {
     const isUserInSystem = await prisma.user.findUnique({
       where: {
         email: body.email,
-        password: body.password,
       },
     });
 
@@ -43,10 +42,12 @@ userRouter.post("/signup", async (c) => {
       });
     }
 
+    const hashedPassword = await bcrypt.hash(body.password, 10);
+
     const user = await prisma.user.create({
       data: {
         email: body.email,
-        password: body.password,
+        password: hashedPassword,
         username: body.username,
       },
     });
@@ -66,7 +67,6 @@ userRouter.post("/signup", async (c) => {
 
 userRouter.post("/signin", async (c) => {
   const body = await c.req.json();
-
   const parseResult = signinSchema.safeParse(body);
   if (!parseResult.success) {
     c.status(400);
@@ -83,13 +83,18 @@ userRouter.post("/signin", async (c) => {
   const user = await prisma.user.findUnique({
     where: {
       email: body.email,
-      password: body.password,
     },
   });
 
   if (!user) {
     c.status(403);
     return c.json({ message: "User not found" });
+  }
+
+  const passwordMatches = await bcrypt.compare(body.password, user.password);
+  if (!passwordMatches) {
+    c.status(403);
+    return c.json({ message: "Invalid email or password" });
   }
 
   const jwt = await sign({ id: user.id }, c.env.JWT_SECRET);

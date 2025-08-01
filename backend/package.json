@@ -8,6 +8,7 @@
   "dependencies": {
     "@prisma/client": "^6.11.1",
     "@prisma/extension-accelerate": "^2.0.2",
+    "bcryptjs": "^3.0.2",
     "hono": "^4.8.4",
     "nanoid": "^5.1.5",
     "node-fetch": "^2.7.0",
@@ -15,7 +16,7 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "wrangler": "^4.4.0",
-    "@types/node-fetch": "^2.6.12"
+    "@types/node-fetch": "^2.6.12",
+    "wrangler": "^4.4.0"
   }
 }
