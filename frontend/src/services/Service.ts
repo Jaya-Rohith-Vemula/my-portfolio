@@ -59,3 +59,8 @@ export const updatePortfolio = async (data: UpdatePortfolio) => {
   const response = await api.put(`/api/v1/portfolio/update`, data);
   return response.data;
 };
+
+export const getQuote = async () => {
+  const response = await api.get("/api/v1/quote");
+  return response.data;
+};
