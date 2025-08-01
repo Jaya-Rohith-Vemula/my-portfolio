@@ -101,17 +101,16 @@ export default function LiveHtmlEditor() {
             </Grid>
           </Grid>
         </Grid>
-
-        <iframe
-          srcDoc={srcDoc}
-          title="Live Preview"
-          style={{
-            width: "100%",
-            height: "100%",
-            border: "1px solid #ccc",
-          }}
-          sandbox="allow-scripts"
-        />
+        <Grid>
+          <div
+            dangerouslySetInnerHTML={{ __html: srcDoc }}
+            style={{
+              height: "100%",
+              overflowY: "auto",
+              padding: 12,
+            }}
+          />
+        </Grid>
       </Split>
     </div>
   );
