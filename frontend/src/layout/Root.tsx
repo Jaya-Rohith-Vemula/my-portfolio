@@ -24,7 +24,7 @@ const Root = () => {
           width: "100vw",
         }}
       >
-        <Box component="main" id="main">
+        <Box>
           <ErrorBoundary FallbackComponent={ErrorFallback}>
             <Outlet />
           </ErrorBoundary>

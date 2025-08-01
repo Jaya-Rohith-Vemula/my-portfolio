@@ -58,7 +58,7 @@ export default function LiveHtmlEditor() {
   }
 
   return (
-    <div style={{ width: "100vw", height: "100vh" }}>
+    <div>
       <Split
         sizes={[50, 50]}
         minSize={200}
