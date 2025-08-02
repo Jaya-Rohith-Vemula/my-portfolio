@@ -1,7 +1,6 @@
 import * as yup from "yup";
 
 const schema = yup.object().shape({
-  title: yup.string().required("Title is required"),
   about: yup.string().required("About is required"),
   name: yup.string().required("Name is required"),
   phNumber: yup.string().optional(),

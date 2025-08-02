@@ -9,11 +9,16 @@ import {
   IconButton,
   Divider,
   Grid,
+  CircularProgress,
 } from "@mui/material";
 import { Add, Delete } from "@mui/icons-material";
 import { grey } from "@mui/material/colors";
 import schema from "./createSchemaValidation";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useState } from "react";
+import { postCreatePortfolio } from "../../services/Service";
+import type { CreatePortfolio, ErrorResponse } from "../../types/types";
 
 interface EducationEntry {
   school: string;
@@ -49,7 +54,10 @@ interface PortfolioFormValues {
 }
 
 export default function CreatePortfolioPage() {
+  const navigate = useNavigate();
   const title = useLocation().state.title;
+  const [loading, setLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -81,19 +89,41 @@ export default function CreatePortfolioPage() {
     },
   });
 
+  const onSubmit = (data: PortfolioFormValues) => {
+    console.log("Form Data:", data);
+    handleGenerate(data);
+  };
+
+  const handleGenerate = async (data: PortfolioFormValues) => {
+    setLoading(true);
+    try {
+      const payload: CreatePortfolio = {
+        name: title,
+        content: JSON.stringify(data),
+      };
+
+      const response = await postCreatePortfolio(payload);
+      if (response.id) navigate("/landingpage");
+    } catch (error) {
+      if (axios.isAxiosError<ErrorResponse>(error)) {
+        alert(error.response?.data?.message ?? "unable to create portfolio");
+      } else {
+        alert("An unexpected error occurred");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const educationFields = useFieldArray({ control, name: "education" });
   const experienceFields = useFieldArray({ control, name: "experience" });
   const projectFields = useFieldArray({ control, name: "projects" });
   const skillFields = useFieldArray({ control, name: "skills" });
 
-  const onSubmit = (data: PortfolioFormValues | string) => {
-    console.log("Submitted Portfolio:", data);
-  };
-
   return (
     <Box className="min-h-screen bg-gradient-to-bl from-gray-200 to-gray-400 px-4 py-8 flex flex-col items-center justify-center">
       <Typography variant="h4" sx={{ color: grey[800], pb: 2 }}>
-        <b>{title}</b> Portfolio
+        <b>{title}</b> Details
       </Typography>
       <Box className="max-w-4xl w-full bg-gray-100 p-6 rounded-xl shadow">
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -277,7 +307,7 @@ export default function CreatePortfolioPage() {
                     </Grid>
                     <Grid size={{ xs: 12, sm: 6 }}>
                       <TextField
-                        label="Degree"
+                        label="Role"
                         fullWidth
                         required
                         {...register(`experience.${index}.role`)}
@@ -460,7 +490,11 @@ export default function CreatePortfolioPage() {
                 "&:hover": { backgroundColor: grey[900] },
               }}
             >
-              Generate
+              {loading ? (
+                <CircularProgress size={24} sx={{ color: "white" }} />
+              ) : (
+                "Generate"
+              )}
             </Button>
           </Box>
         </form>
