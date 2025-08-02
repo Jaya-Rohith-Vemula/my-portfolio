@@ -1,10 +1,16 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
-import { Typography, CardContent, CircularProgress } from "@mui/material";
+import {
+  Typography,
+  CardContent,
+  CircularProgress,
+  Snackbar,
+} from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { deletePortfolio, getPortfoliosByUser } from "../services/Service";
 import ConfirmDialog from "../components/ConfirmDialog";
+import MuiAlert, { type AlertColor } from "@mui/material/Alert";
 
 export interface Portfolio {
   content: string;
@@ -22,6 +28,10 @@ export default function LandingPage() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<AlertColor>("success");
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   useEffect(() => {
     const fetchPortfolios = async () => {
@@ -55,6 +65,22 @@ export default function LandingPage() {
     setDeleteLoading(false);
     setDeleteId(null);
     setConfirmOpen(false);
+  };
+
+  const handleCopyLink = (publicId: string) => {
+    const url = `${window.location.origin}/portfolio/${publicId}`;
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
+        setSnackbarMessage("Link copied to clipboard!");
+        setSnackbarSeverity("success");
+        setSnackbarOpen(true);
+      })
+      .catch(() => {
+        setSnackbarMessage("Failed to copy link.");
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
+      });
   };
 
   return (
@@ -98,6 +124,13 @@ export default function LandingPage() {
                   </Typography>
                   <div className="flex gap-4 mt-2">
                     <Link
+                      to={`/portfolio/${portfolio.publicId}`}
+                      className="link"
+                      target="_blank"
+                    >
+                      View
+                    </Link>
+                    <Link
                       to="/edit"
                       className="link"
                       state={{ publicId: portfolio.publicId }}
@@ -105,11 +138,11 @@ export default function LandingPage() {
                       Edit
                     </Link>
                     <Link
-                      to={`/portfolio/${portfolio.publicId}`}
+                      to={""}
                       className="link"
-                      target="_blank"
+                      onClick={() => handleCopyLink(portfolio.publicId)}
                     >
-                      View
+                      Share
                     </Link>
                     <Link
                       className="link"
@@ -138,6 +171,22 @@ export default function LandingPage() {
         confirmText="Delete"
         cancelText="Cancel"
       />
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={() => setSnackbarOpen(false)}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </div>
   );
 }
